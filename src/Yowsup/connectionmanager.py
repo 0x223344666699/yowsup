@@ -219,7 +219,7 @@ class YowsupConnectionManager:
 		self._d("Setting state to 0")
 		self.state = 0
 
-	def auth(self, username, password):
+	def auth(self, username, password, mcc="000", mnc="000"):
 		self._d(">>>>>>>>                         AUTH CALLED")
 		username = str(username)
 		#password = str(password)
@@ -238,7 +238,7 @@ class YowsupConnectionManager:
 			yAuth = YowsupAuth(ConnectionEngine())
 			try:
 				self.state = 1
-				connection = yAuth.authenticate(username, password, Constants.domain, Constants.resource)
+				connection = yAuth.authenticate(username, password, Constants.domain, Constants.resource, mcc, mnc)
 			except socket.gaierror:
 				self._d("DNS ERROR")
 				self.readerThread.sendDisconnected("dns")
@@ -1031,7 +1031,12 @@ class ReaderThread(threading.Thread):
 
 		pictureNode = node.getChild("picture")
 		if pictureNode.data is not None:
-			tmp = self.createTmpFile(pictureNode.data.encode('latin-1'), "wb")
+			print "pictureNode.data: " + pictureNode.data
+			try:
+				path = pictureNode.data.encode('latin-1')
+			except:
+				path = pictureNode.data
+			tmp = self.createTmpFile(path, "wb")
 
 			pictureId = int(pictureNode.getAttributeValue('id'))
 			try:
@@ -1044,14 +1049,14 @@ class ReaderThread(threading.Thread):
 	def parseGetPictureIds(self,node):
 		jid = node.getAttributeValue("from");
 		groupNode = node.getChild("list")
-		#self._d(groupNode.toString())
+		self._d(groupNode.toString())
 		children = groupNode.getAllChildren("user");
-		#pids = []
+		pids = []
 		for c in children:
 			if c.getAttributeValue("id") is not None:
-				#pids.append({"jid":c.getAttributeValue("jid"),"id":c.getAttributeValue("id")})
+				pids.append({"jid":c.getAttributeValue("jid"),"id":c.getAttributeValue("id")})
 				self.signalInterface.send("contact_gotProfilePictureId", (c.getAttributeValue("jid"), c.getAttributeValue("id")))
-		#self.signalInterface.send("contact_gotProfilePictureIds", (pids,))
+		self.signalInterface.send("contact_gotProfilePictureIds", (pids,))
 
 
 	def parseSetPicture(self,node):

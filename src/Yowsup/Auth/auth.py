@@ -53,7 +53,7 @@ class YowsupAuth:
 	def authenticationFailed(self):
 		print("AUTH FAIL")
 
-	def authenticate(self, username, password, domain, resource):
+	def authenticate(self, username, password, domain, resource, mcc="000", mnc="000"):
 		print("Connecting to "+Constants.host)
 		#connection = ConnectionEngine()
 		self.connection.connect((Constants.host, Constants.port));
@@ -70,5 +70,5 @@ class YowsupAuth:
 		
 	
 		
-		connection = self.mechanism.login(username, password, domain, resource)
+		connection = self.mechanism.login(username, password, domain, resource, mcc, mnc)
 		return connection

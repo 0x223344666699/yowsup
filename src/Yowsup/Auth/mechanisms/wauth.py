@@ -21,6 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import socket, hashlib, hmac, sys
 from Yowsup.Common.debugger import Debugger
+from Yowsup.Common.utilities import Utilities as WAUtilities
 from Yowsup.Common.watime import WATime
 from Yowsup.ConnectionIO.protocoltreenode import ProtocolTreeNode
 
@@ -28,6 +29,7 @@ from struct import pack
 from operator import xor
 from itertools import starmap
 from hashlib import sha1
+from os.path import exists as pathExists
 
 
 def _bytearray(data):
@@ -57,9 +59,11 @@ class WAuth():
 	def setAuthObject(self, authObject):
 		self.authObject = authObject
 	
-	def login(self, username, password, domain, resource):
+	def login(self, username, password, domain, resource, mcc="000", mnc="000"):
 
 		self.username = username
+		self.mcc = mcc
+		self.mnc = mnc
 
 		try:
 			self._d("Starting stream")
@@ -99,9 +103,42 @@ class WAuth():
 
 	def sendAuth(self):
 		# "user":self.connection.user,
-		blob = []
-		node = ProtocolTreeNode("auth",{"user":self.username,"xmlns":"urn:ietf:params:xml:ns:xmpp-sasl","mechanism":"WAUTH-1"}, None, ''.join(map(chr, blob)));
+		blob = self.createAuthBlob()
+		node = ProtocolTreeNode("auth",{"user":self.username,"xmlns":"urn:ietf:params:xml:ns:xmpp-sasl","mechanism":"WAUTH-1"}, None, blob);
 		self.conn.writer.write(node);
+
+	def createAuthBlob(self):
+		data = ""
+		if pathExists("/home/user/.wazapp/challenge"):
+			f = open("/home/user/.wazapp/challenge", "rb")
+			data = f.read()
+			f.close()
+		if len(data) > 0:
+			numArray = _bytearray(KeyStream.keyFromPasswordAndNonce(self.authObject.password, data))
+			self.conn.reader.inputKey = self.inputKey = KeyStream(numArray)
+			self.outputKey = KeyStream(numArray)
+
+			nums = []
+
+			nums.extend(self.username)
+			nums.extend(data)
+
+			wt = WATime()
+			utcNow = int(wt.utcTimestamp())
+			nums.extend(str(utcNow))
+
+			nums.extend(WAUtilities.UserAgent)
+			nums.extend(" Mcc/Mnc")
+			nums.extend(self.mcc)
+			nums.extend(self.mnc)
+
+			encoded = self.outputKey.encodeMessage(nums, 0, 0, len(nums))
+			encoded = "".join(map(chr, encoded))
+
+			return encoded
+		else:
+			blob = []
+			return ''.join(map(chr, blob))
 
 	def readFeaturesAndChallenge(self):
 		root = self.conn.reader.nextTree();
@@ -192,6 +229,11 @@ class WAuth():
 			self.authObject.accountKind = 1;
 
 		self.conn.reader.inn.buf = [];
+
+		nextChallenge = node.data;
+		f = open("/home/user/.wazapp/challenge", "wb")
+		f.write(nextChallenge)
+		f.close()
 
 		self.conn.writer.outputKey = self.outputKey
 		self.authObject.authenticationComplete()

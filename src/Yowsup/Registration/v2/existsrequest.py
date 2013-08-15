@@ -30,6 +30,7 @@ class WAExistsRequest(WARequest):
 		self.addParam("cc",cc);
 		self.addParam("in",p_in);
 		self.addParam("id", idx);
+		self.addParam("c", "cookie");
 
 		self.url = "v.whatsapp.net/v2/exist"
 

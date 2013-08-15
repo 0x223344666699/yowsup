@@ -23,15 +23,15 @@ from Yowsup.Common.Http.warequest import WARequest
 from Yowsup.Common.Http.waresponseparser import JSONResponseParser
 class WACodeRequest(WARequest):
 
-	def __init__(self,cc, p_in, idx, method="sms"):
+	def __init__(self,cc, p_in, idx, mcc="000", mnc="000", method="sms"):
 		super(WACodeRequest,self).__init__();
 
 		self.addParam("cc", cc);
 		self.addParam("in", p_in);
 		self.addParam("lc", "US");
 		self.addParam("lg", "en");
-		self.addParam("mcc", "000");
-		self.addParam("mnc", "000");
+		self.addParam("mcc", mcc);
+		self.addParam("mnc", mnc);
 		self.addParam("method", method);
 		self.addParam("id", idx)
 
