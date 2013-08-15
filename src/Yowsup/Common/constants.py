@@ -53,7 +53,7 @@ class Constants:
 	#resource = "S40-2.4.22"
 	#resource = "Symbian-2.9.6-443"
 	#resource = ""
-	resource = "Android-2.10.750"
+	#resource = "Android-2.10.750"
 	domain = "s.whatsapp.net"
 	
-	v="0.61"
+	v="0.62"

@@ -22,6 +22,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from .mechanisms.wauth import WAuth as AuthMechanism
 
 from Yowsup.Common.constants import Constants
+from Yowsup.Common.utilities import Utilities
 
 class YowsupAuth:
 	def __init__(self, connection):
@@ -65,7 +66,7 @@ class YowsupAuth:
 		self.username = username
 		self.password = password
 		self.domain = domain
-		self.resource = resource
+		self.resource = Utilities.getResource(str(Constants.port))
 		self.jid = "%s@%s"%(self.username,self.domain)
 		
 	

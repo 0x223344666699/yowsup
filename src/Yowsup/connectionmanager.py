@@ -28,6 +28,7 @@ import threading, select, time
 from Yowsup.Common.watime import WATime
 from .Auth.auth import YowsupAuth
 from Yowsup.Common.constants import Constants
+from Yowsup.Common.utilities import Utilities
 from Yowsup.Interfaces.Lib.LibInterface import LibMethodInterface, LibSignalInterface
 import tempfile
 from random import randrange
@@ -238,7 +239,7 @@ class YowsupConnectionManager:
 			yAuth = YowsupAuth(ConnectionEngine())
 			try:
 				self.state = 1
-				connection = yAuth.authenticate(username, password, Constants.domain, Constants.resource, mcc, mnc)
+				connection = yAuth.authenticate(username, password, Constants.domain, Utilities.getResource(str(Constants.port)), mcc, mnc)
 			except socket.gaierror:
 				self._d("DNS ERROR")
 				self.readerThread.sendDisconnected("dns")
