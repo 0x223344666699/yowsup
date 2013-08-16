@@ -121,16 +121,16 @@ class WAuth():
 			nums = []
 
 			nums.extend(self.username)
-			nums.extend(data)
+			nums.extend(str(data))
 
 			wt = WATime()
 			utcNow = int(wt.utcTimestamp())
 			nums.extend(str(utcNow))
 
-			nums.extend(WAUtilities.UserAgent)
-			nums.extend(" Mcc/Mnc")
-			nums.extend(self.mcc)
-			nums.extend(self.mnc)
+			nums.extend(str(WAUtilities.UserAgent))
+			nums.extend(str(" Mcc/Mnc"))
+			nums.extend(str(self.mcc))
+			nums.extend(str(self.mnc))
 
 			encoded = self.outputKey.encodeMessage(nums, 0, 0, len(nums))
 			encoded = "".join(map(chr, encoded))
