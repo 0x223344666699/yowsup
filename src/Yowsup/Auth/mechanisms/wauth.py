@@ -111,7 +111,7 @@ class WAuth():
 		data = ""
 		if pathExists("/home/user/.wazapp/challenge"):
 			f = open("/home/user/.wazapp/challenge", "rb")
-			data = f.read()
+			data = str(f.read())
 			f.close()
 		if len(data) > 0:
 			numArray = _bytearray(KeyStream.keyFromPasswordAndNonce(self.authObject.password, data))

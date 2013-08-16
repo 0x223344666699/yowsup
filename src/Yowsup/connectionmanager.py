@@ -239,7 +239,7 @@ class YowsupConnectionManager:
 			yAuth = YowsupAuth(ConnectionEngine())
 			try:
 				self.state = 1
-				connection = yAuth.authenticate(username, password, Constants.domain, Utilities.getResource(str(Constants.port)), mcc, mnc)
+				connection = yAuth.authenticate(username, password, Constants.domain, Utilities.Resource, mcc, mnc)
 			except socket.gaierror:
 				self._d("DNS ERROR")
 				self.readerThread.sendDisconnected("dns")

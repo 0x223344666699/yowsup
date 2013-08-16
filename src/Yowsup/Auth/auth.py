@@ -66,7 +66,7 @@ class YowsupAuth:
 		self.username = username
 		self.password = password
 		self.domain = domain
-		self.resource = Utilities.getResource(str(Constants.port))
+		self.resource = Utilities.Resource
 		self.jid = "%s@%s"%(self.username,self.domain)
 		
 	
