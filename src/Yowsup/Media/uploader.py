@@ -83,7 +83,7 @@ class MediaUploader(WARequest):
             lastEmit = 0
     
             while totalsent < int(filesize):
-                ssl_sock.write(stream[:buf])
+                ssl_sock.write(str(stream[:buf]))
                 status = totalsent * 100 / filesize
                 if lastEmit!=status and status!=100 and filesize>12288:
                     if self.progressCallback:
