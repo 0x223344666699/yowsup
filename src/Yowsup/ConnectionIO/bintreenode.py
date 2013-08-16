@@ -76,8 +76,8 @@ class BinTreeNodeReader():
         return i.read();
         
     def readInt16(self,i,socketOnly=0):
-        intTop = i.read(socketOnly);
-        intBot = i.read(socketOnly);
+        intTop = i.read();
+        intBot = i.read();
         #Utilities.debug(str(intTop)+"------------"+str(intBot));
         value = (intTop << 8) + intBot;
         if value is not None:
