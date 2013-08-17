@@ -917,6 +917,7 @@ class ReaderThread(threading.Thread):
 
 	def parseGroups(self,node):
 		children = node.getAllChildren("group");
+		groups = []
 		for groupNode in children:
 			jid = groupNode.getAttributeValue("id") + "@g.us"
 			owner = groupNode.getAttributeValue("owner")
@@ -926,6 +927,8 @@ class ReaderThread(threading.Thread):
 			creation = groupNode.getAttributeValue("creation")
 
 			self.signalInterface.send("group_gotInfo",(jid, owner, subject, subjectOwner, int(subjectT),int(creation)))
+			groups.append({"gJid":jid, "ownerJid":owner, "subject":subject, "subjectOwnerJid":subjectOwner, "subjectT":subjectT, "creation":creation})
+		self.signalInterface.send("group_gotGroups", (groups,))
 
 
 	def parseGroupInfo(self,node):
