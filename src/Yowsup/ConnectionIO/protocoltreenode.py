@@ -45,7 +45,11 @@ class ProtocolTreeNode():
 			
 			if self.children is not None:
 				for c in self.children:
-					out+=c.toString();
+					try:
+						out+=c.toString();
+					except:
+						print "toString error. c: " + str(c) + ". Trying string instance..."
+						out+=str(c.toString());
 			#print sel
 			out+= "</"+self.tag+">\n"
 			return out
