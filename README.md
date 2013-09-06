@@ -24,6 +24,11 @@ Yowsup also comes with a cross platform command-line frontend called [yowsup-cli
  * [python-dateutil](http://labix.org/python-dateutil)
  * **yowsup-cli** requires [argparse](http://code.google.com/p/argparse/) for python < 2.7
 
+## Credits:
+* [Jake](https://github.com/Dynogic)
+* [shiroko](https://github.com/shiroko)
+for WhatsApp token generator and many!
+
 ## License:
 MIT License:
 
