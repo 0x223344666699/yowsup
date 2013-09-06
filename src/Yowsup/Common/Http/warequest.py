@@ -71,21 +71,44 @@ class WARequest(object):
 		self.params = []
 
 	def getUserAgent(self):
-		return WAUtilities.UserAgent
-	
-	def getToken(self, phone):
+		uaResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/whitesoft/whatsapp_ua", {}, [], "GET")
+		uaReply = WAUtilities.UserAgent
+		
+		if uaResult.status == WARequest.OK:
+			uaReply = uaResult.read().decode()
 
-		token = WAUtilities.LongHash + WAUtilities.ShortHash + phone
+		self._d(uaReply)
+
+		return uaReply
+
+	def getVersion(self):
+		versionResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/whitesoft/whatsapp_version", {}, [], "GET")
+		versionReply = WAUtilities.Version
 		
-		return hashlib.md5(token.encode()).hexdigest()
-	
+		if versionResult.status == WARequest.OK:
+			versionReply = versionResult.read().decode()
+
+		self._d(versionReply)
+
+		return versionReply
+
+	def getToken(self, phone):
+		tokenResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/wapi/watokenrequest_"+self.getVersion()+"/getToken", {}, [("in",phone)], "GET")
+		tokenReply = ""
+
+		if tokenResult.status == WARequest.OK:
+			tokenReply = tokenResult.read().decode()
+
+		self._d("Token length: " + str(len(tokenReply)))
+		return tokenReply
+
 	def send(self, parser = None):
-		
+
 		if self.type == "POST":
 			return self.sendPostRequest(parser)
-		
+
 		return self.sendGetRequest(parser)
-		
+
 	def setParser(self, parser):
 		if isinstance(parser, ResponseParser):
 			self.parser = parser

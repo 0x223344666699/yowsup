@@ -220,7 +220,7 @@ class YowsupConnectionManager:
 		self._d("Setting state to 0")
 		self.state = 0
 
-	def auth(self, username, password, mcc="000", mnc="000"):
+	def auth(self, username, password, mcc="000", mnc="000", resource="Android-2.11.23-443"):
 		self._d(">>>>>>>>                         AUTH CALLED")
 		username = str(username)
 		#password = str(password)
@@ -239,7 +239,7 @@ class YowsupConnectionManager:
 			yAuth = YowsupAuth(ConnectionEngine())
 			try:
 				self.state = 1
-				connection = yAuth.authenticate(username, password, Constants.domain, Utilities.Resource, mcc, mnc)
+				connection = yAuth.authenticate(username, password, Constants.domain, resource, mcc, mnc)
 			except socket.gaierror:
 				self._d("DNS ERROR")
 				self.readerThread.sendDisconnected("dns")
