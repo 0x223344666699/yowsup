@@ -71,7 +71,7 @@ class WARequest(object):
 		self.params = []
 
 	def getUserAgent(self):
-		uaResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/whitesoft/whatsapp_ua", {}, [], "GET")
+		uaResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/whitesoft/whatsapp_ua", {"Accept": "text/plain"}, [], "GET")
 		uaReply = WAUtilities.UserAgent
 		
 		if uaResult.status == WARequest.OK:
@@ -82,7 +82,7 @@ class WARequest(object):
 		return uaReply
 
 	def getVersion(self):
-		versionResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/whitesoft/whatsapp_version", {}, [], "GET")
+		versionResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/whitesoft/whatsapp_version", {"Accept": "text/plain"}, [], "GET")
 		versionReply = WAUtilities.Version
 		
 		if versionResult.status == WARequest.OK:
@@ -93,7 +93,7 @@ class WARequest(object):
 		return versionReply
 
 	def getToken(self, phone):
-		tokenResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/wapi/watokenrequest_"+self.getVersion()+"/getToken", {}, [("in",phone)], "GET")
+		tokenResult = WARequest.sendRequest("coderus.openrepos.net", 80, "/wapi/watokenrequest_"+self.getVersion()+"/getToken", {"Accept": "text/plain"}, [("in",phone)], "GET")
 		tokenReply = ""
 
 		if tokenResult.status == WARequest.OK:
